@@ -370,8 +370,10 @@
     async function loadInitialData() {
       try {
         const res = await fetch('/api/init');
-        if (!res.ok) throw new Error('Init failed (' + res.status + ')');
-        const data = await res.json();
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          throw new Error((data && data.error) ? data.error : ('Init failed (' + res.status + ')'));
+        }
         onInitialData(data);
       } catch (err) {
         showMessage(err && err.message ? err.message : 'Could not load app data.', 'err');

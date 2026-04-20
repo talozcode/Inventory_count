@@ -11,6 +11,7 @@ module.exports = async (req, res) => {
     const result = await submitCount(payload);
     res.status(200).json(result);
   } catch (err) {
+    console.error('submit error:', err);
     res.status(400).json({ ok: false, message: err && err.message ? err.message : 'Submit failed.' });
   }
 };

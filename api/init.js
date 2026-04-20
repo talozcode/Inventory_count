@@ -11,6 +11,8 @@ module.exports = async (req, res) => {
       sessionStatus: sessionStatus || 'Open',
     });
   } catch (err) {
-    res.status(500).json({ error: err && err.message ? err.message : 'Init failed.' });
+    console.error('init error:', err);
+    const msg = err && err.message ? err.message : 'Init failed.';
+    res.status(500).json({ error: msg });
   }
 };
