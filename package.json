@@ -1,0 +1,12 @@
+{
+  "name": "inventory-count",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Mobile-friendly inventory count web app backed by Google Sheets.",
+  "dependencies": {
+    "googleapis": "^144.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Inventory Count</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <style>
+    :root{
+      --bg:#f3f5f7;
+      --card:#ffffff;
+      --text:#18212b;
+      --muted:#667381;
+      --line:#d9e0e7;
+      --accent:#111827;
+      --accent-soft:#eef2f7;
+      --green:#2f7d32;
+      --green-bg:#e8f5e9;
+      --yellow-bg:#fff8db;
+      --red-bg:#fdeaea;
+      --shadow:0 10px 30px rgba(16,24,40,.08);
+      --radius:18px;
+    }
+
+    * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+    html, body {
+      margin:0;
+      padding:0;
+      background:linear-gradient(180deg,#f8fafc 0%, #f3f5f7 100%);
+      color:var(--text);
+      font-family: Inter, Arial, sans-serif;
+    }
+
+    body {
+      min-height:100vh;
+      padding:14px;
+    }
+
+    .wrap {
+      max-width:720px;
+      margin:0 auto;
+    }
+
+    .app-card {
+      background:var(--card);
+      border:1px solid rgba(217,224,231,.8);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      padding:18px;
+    }
+
+    .top {
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:14px;
+    }
+
+    .title {
+      font-size:24px;
+      font-weight:700;
+      letter-spacing:-0.02em;
+      margin:0 0 4px 0;
+    }
+
+    .subtitle {
+      font-size:13px;
+      color:var(--muted);
+      margin:0;
+    }
+
+    .pill {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:38px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:var(--accent-soft);
+      color:#334155;
+      font-size:13px;
+      font-weight:600;
+      white-space:nowrap;
+    }
+
+    .section { margin-top:14px; }
+
+    label {
+      display:block;
+      margin:0 0 7px 2px;
+      font-size:13px;
+      font-weight:700;
+      color:#334155;
+    }
+
+    input[type="text"],
+    input[type="number"]{
+      width:100%;
+      min-height:54px;
+      padding:14px 15px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fff;
+      color:var(--text);
+      font-size:16px;
+      outline:none;
+      transition:border-color .15s ease, box-shadow .15s ease, transform .05s ease;
+      appearance:none;
+      -webkit-appearance:none;
+    }
+
+    input:focus{
+      border-color:#94a3b8;
+      box-shadow:0 0 0 4px rgba(148,163,184,.14);
+    }
+
+    .grid-2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .area-buttons{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .area-btn,
+    .action-btn{
+      min-height:56px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:#f8fafc;
+      color:var(--text);
+      font-size:17px;
+      font-weight:700;
+      cursor:pointer;
+      transition:transform .05s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease;
+    }
+
+    .area-btn:active,
+    .action-btn:active{
+      transform:scale(.99);
+    }
+
+    .area-btn.active{
+      background:#714B67;
+      color:#fff;
+      border-color:#714B67;
+      box-shadow:0 8px 20px rgba(113,75,103,.22);
+    }
+
+    .product-box{
+      margin-top:10px;
+      background:#f8fafc;
+      border:1px solid #e6ebf1;
+      border-radius:18px;
+      padding:14px;
+      min-height:118px;
+    }
+
+    .product-line{
+      display:flex;
+      gap:14px;
+      align-items:center;
+    }
+
+    .thumb{
+      width:92px;
+      height:92px;
+      flex:0 0 92px;
+      border-radius:16px;
+      object-fit:cover;
+      background:#e5e7eb;
+      border:1px solid #dde3ea;
+    }
+
+    .hidden{ display:none !important; }
+
+    .product-name{
+      font-size:22px;
+      line-height:1.15;
+      font-weight:800;
+      letter-spacing:-0.02em;
+      margin-bottom:6px;
+      word-break:break-word;
+    }
+
+    .meta{
+      font-size:14px;
+      line-height:1.4;
+      color:#475569;
+      word-break:break-word;
+    }
+
+    .status-box{
+      min-height:54px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:16px;
+      background:var(--accent-soft);
+      color:#475569;
+      font-size:14px;
+      font-weight:700;
+      text-align:center;
+      padding:10px;
+    }
+
+    .actions{
+      display:grid;
+      gap:10px;
+      margin-top:18px;
+    }
+
+    .save-btn{
+      background:#714B67;
+      color:#fff;
+      border:none;
+      box-shadow:0 12px 26px rgba(17,24,39,.18);
+    }
+
+    .replace-btn{
+      background:#64748b;
+      color:#fff;
+      border:none;
+    }
+
+    .message{
+      margin-top:12px;
+      min-height:48px;
+      border-radius:16px;
+      padding:13px 14px;
+      font-size:15px;
+      line-height:1.45;
+    }
+
+    .ok{ background:var(--green-bg); color:#1b5e20; }
+    .warn{ background:var(--yellow-bg); color:#7a5d00; }
+    .err{ background:var(--red-bg); color:#8a1c1c; }
+
+    .hint{
+      font-size:12px;
+      color:var(--muted);
+      margin-top:7px;
+      margin-left:2px;
+    }
+
+    @media (max-width:640px){
+      body { padding:10px; }
+      .app-card { padding:14px; border-radius:20px; }
+      .top { flex-direction:column; align-items:flex-start; }
+      .grid-2 { grid-template-columns:1fr; }
+      .product-line { align-items:flex-start; }
+      .thumb { width:78px; height:78px; flex-basis:78px; border-radius:14px; }
+      .product-name { font-size:19px; }
+      .area-btn, .action-btn { min-height:54px; font-size:16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="app-card">
+      <div class="top">
+        <div>
+          <h1 class="title">Inventory Count</h1>
+          <p class="subtitle">Scan barcode, enter quantity, save.</p>
+        </div>
+        <div class="pill" id="areaStatus">Area: Shop</div>
+      </div>
+
+      <div class="section">
+        <label for="counterName">Counter Name</label>
+        <input type="text" id="counterName" placeholder="Enter your name" autocomplete="off">
+      </div>
+
+      <div class="section">
+        <label>Area</label>
+        <div class="area-buttons">
+          <button type="button" class="area-btn active" id="btnShop">SHOP</button>
+          <button type="button" class="area-btn" id="btnWarehouse">WAREHOUSE</button>
+        </div>
+      </div>
+
+      <div class="section">
+        <label for="barcode">Scan Barcode</label>
+        <input type="text" id="barcode" placeholder="Tap here and scan barcode" autofocus autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="text">
+        <div class="hint">After scan, tap Quantity and then Save Count.</div>
+      </div>
+
+      <div id="productInfo" class="product-box section">
+        <div class="product-line">
+          <img id="productImage" class="thumb hidden" alt="">
+          <div id="productText">Ready to scan.</div>
+        </div>
+      </div>
+
+      <div class="section grid-2">
+        <div>
+          <label for="qty">Quantity</label>
+          <input type="number" id="qty" min="0" step="1" inputmode="numeric" placeholder="Enter quantity">
+        </div>
+        <div>
+          <label>&nbsp;</label>
+          <div class="status-box" id="scanStatus">Waiting for barcode</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="action-btn save-btn" id="saveBtn">Save Count</button>
+        <button type="button" class="action-btn replace-btn hidden" id="replaceBtn">Replace Existing Count</button>
+      </div>
+
+      <div id="message" class="message hidden"></div>
+    </div>
+  </div>
+
+  <script>
+    let selectedArea = 'Shop';
+    let barcodeCache = {};
+    let currentHit = null;
+    const els = {};
+
+    document.addEventListener('DOMContentLoaded', init);
+
+    function init() {
+      els.counterName = document.getElementById('counterName');
+      els.btnShop = document.getElementById('btnShop');
+      els.btnWarehouse = document.getElementById('btnWarehouse');
+      els.areaStatus = document.getElementById('areaStatus');
+      els.barcode = document.getElementById('barcode');
+      els.productText = document.getElementById('productText');
+      els.productImage = document.getElementById('productImage');
+      els.qty = document.getElementById('qty');
+      els.scanStatus = document.getElementById('scanStatus');
+      els.saveBtn = document.getElementById('saveBtn');
+      els.replaceBtn = document.getElementById('replaceBtn');
+      els.message = document.getElementById('message');
+
+      els.btnShop.addEventListener('click', () => setArea('Shop'));
+      els.btnWarehouse.addEventListener('click', () => setArea('Warehouse'));
+
+      els.barcode.addEventListener('input', onBarcodeInput);
+      els.barcode.addEventListener('change', onBarcodeInput);
+      els.barcode.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          onBarcodeInput();
+          e.preventDefault();
+          els.qty.focus();
+          els.qty.select();
+        }
+      });
+
+      els.qty.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          submitCount(false);
+        }
+      });
+
+      els.saveBtn.addEventListener('click', function() { submitCount(false); });
+      els.replaceBtn.addEventListener('click', function() { submitCount(true); });
+
+      setArea('Shop');
+      loadInitialData();
+    }
+
+    async function loadInitialData() {
+      try {
+        const res = await fetch('/api/init');
+        if (!res.ok) throw new Error('Init failed (' + res.status + ')');
+        const data = await res.json();
+        onInitialData(data);
+      } catch (err) {
+        showMessage(err && err.message ? err.message : 'Could not load app data.', 'err');
+        setScanStatus('Could not load cache');
+      }
+    }
+
+    function onInitialData(data) {
+      barcodeCache = (data && data.barcodeCache) || {};
+      const count = Object.keys(barcodeCache).length;
+      if (!count) {
+        document.getElementById('productText').textContent = 'Barcode cache is empty. Rebuild it from the Google Sheet menu.';
+        setScanStatus('Cache empty');
+      } else {
+        setScanStatus('Ready to scan');
+      }
+    }
+
+    function setArea(area) {
+      selectedArea = area;
+      els.btnShop.classList.toggle('active', area === 'Shop');
+      els.btnWarehouse.classList.toggle('active', area === 'Warehouse');
+      els.areaStatus.textContent = 'Area: ' + area;
+      showMessage('Area selected: ' + area, 'ok', 700);
+    }
+
+    function normalizeBarcode(v) {
+      return String(v || '').replace(/[\r\n\t]/g, '').replace(/\s+/g, '').trim();
+    }
+
+    function onBarcodeInput() {
+      const barcode = normalizeBarcode(els.barcode.value);
+      els.replaceBtn.classList.add('hidden');
+
+      if (!barcode) {
+        currentHit = null;
+        els.productText.textContent = 'Ready to scan.';
+        hideImage();
+        setScanStatus('Waiting for barcode');
+        return;
+      }
+
+      const hit = barcodeCache[barcode];
+      if (hit) {
+        currentHit = hit;
+        els.productText.innerHTML =
+          '<div class="product-name">' + esc(hit.productName || '') + '</div>' +
+          '<div class="meta">Ref: ' + esc(hit.internalRef || '') + '</div>' +
+          '<div class="meta">Type: ' + esc(hit.barcodeType || '') +
+          ((hit.multiplier && hit.multiplier !== 1) ? ' | x' + esc(String(hit.multiplier)) : '') +
+          '</div>';
+        showImage(hit.imageUrl || '');
+        setScanStatus('Product found');
+      } else {
+        currentHit = null;
+        els.productText.textContent = 'Barcode not found. It will be saved to Unknown_Barcodes.';
+        hideImage();
+        setScanStatus('Barcode not found');
+      }
+    }
+
+    function setScanStatus(text) {
+      els.scanStatus.textContent = text;
+    }
+
+    function showImage(url) {
+      if (!url) return hideImage();
+      els.productImage.src = url;
+      els.productImage.classList.remove('hidden');
+      els.productImage.onerror = function() { hideImage(); };
+    }
+
+    function hideImage() {
+      els.productImage.classList.add('hidden');
+      els.productImage.removeAttribute('src');
+      els.productImage.onerror = null;
+    }
+
+    async function submitCount(replaceExisting) {
+      const payload = {
+        counterName: (els.counterName.value || '').trim(),
+        area: selectedArea,
+        barcode: normalizeBarcode(els.barcode.value),
+        qtyEntered: els.qty.value,
+        replaceExisting: replaceExisting,
+        item: currentHit
+      };
+
+      const backup = {
+        barcode: els.barcode.value,
+        qty: els.qty.value,
+        currentHit: currentHit,
+        productHtml: els.productText.innerHTML,
+        imageSrc: els.productImage.getAttribute('src') || '',
+        imageHidden: els.productImage.classList.contains('hidden'),
+        scanStatus: els.scanStatus.textContent
+      };
+
+      setSavingState(true);
+      clearEntry(true);
+      showMessage('Saving...', 'ok');
+      setScanStatus('Saving...');
+
+      try {
+        const res = await fetch('/api/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json().catch(() => ({}));
+        setSavingState(false);
+        if (res.ok && data && data.ok) {
+          showMessage(data.message || 'Saved.', 'ok', 1200);
+          setScanStatus('Ready to scan');
+        } else if (data && data.type === 'exists') {
+          restoreEntry(backup);
+          showMessage((data.message || 'Count already exists.') + ' Existing qty: ' + (data.existing ? data.existing.qty : ''), 'warn');
+          els.replaceBtn.classList.remove('hidden');
+          setScanStatus('Replace existing?');
+        } else {
+          restoreEntry(backup);
+          showMessage((data && data.message) || ('Could not save (' + res.status + ').'), 'err');
+        }
+      } catch (err) {
+        setSavingState(false);
+        restoreEntry(backup);
+        showMessage(err && err.message ? err.message : 'Server error while saving.', 'err');
+      }
+    }
+
+    function clearEntry(skipFocus) {
+      currentHit = null;
+      els.barcode.value = '';
+      els.qty.value = '';
+      els.replaceBtn.classList.add('hidden');
+      els.productText.textContent = 'Ready to scan.';
+      hideImage();
+      if (!skipFocus) els.barcode.focus();
+    }
+
+    function restoreEntry(backup) {
+      currentHit = backup.currentHit || null;
+      els.barcode.value = backup.barcode || '';
+      els.qty.value = backup.qty || '';
+      els.productText.innerHTML = backup.productHtml || 'Ready to scan.';
+      els.scanStatus.textContent = backup.scanStatus || 'Ready to scan';
+      if (backup.imageSrc && !backup.imageHidden) {
+        els.productImage.src = backup.imageSrc;
+        els.productImage.classList.remove('hidden');
+      } else {
+        hideImage();
+      }
+      els.barcode.focus();
+    }
+
+    function setSavingState(isSaving) {
+      els.saveBtn.disabled = isSaving;
+      els.replaceBtn.disabled = isSaving;
+      els.saveBtn.textContent = isSaving ? 'Saving...' : 'Save Count';
+      els.replaceBtn.textContent = isSaving ? 'Saving...' : 'Replace Existing Count';
+      els.saveBtn.style.opacity = isSaving ? '0.88' : '1';
+      els.replaceBtn.style.opacity = isSaving ? '0.88' : '1';
+    }
+
+    let messageTimer = null;
+    function showMessage(text, kind, autoHideMs) {
+      clearTimeout(messageTimer);
+      els.message.classList.remove('hidden');
+      els.message.className = 'message ' + (kind || '');
+      els.message.textContent = text;
+      if (autoHideMs) {
+        messageTimer = setTimeout(function() {
+          els.message.className = 'message hidden';
+          els.message.textContent = '';
+        }, autoHideMs);
+      }
+    }
+
+    function esc(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+  </script>
+</body>
+</html>
