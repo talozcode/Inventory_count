@@ -74,10 +74,6 @@
       margin:0 0 6px 0;
     }
 
-    @media (max-width:640px){
-      .brand-logo { max-width:160px; }
-    }
-
     .subtitle {
       font-size:13px;
       color:var(--muted);
@@ -263,14 +259,26 @@
     }
 
     @media (max-width:640px){
-      body { padding:10px; }
-      .app-card { padding:14px; border-radius:20px; }
-      .top { flex-direction:column; align-items:flex-start; }
-      .grid-2 { grid-template-columns:1fr; }
-      .product-line { align-items:flex-start; }
-      .thumb { width:78px; height:78px; flex-basis:78px; border-radius:14px; }
-      .product-name { font-size:19px; }
-      .area-btn, .action-btn { min-height:54px; font-size:16px; }
+      body { padding:8px; }
+      .app-card { padding:12px; border-radius:18px; }
+      .top { align-items:center; margin-bottom:10px; }
+      .brand-logo { max-width:130px; margin:0; }
+      .title, .subtitle { display:none; }
+      .section { margin-top:10px; }
+      .actions { margin-top:12px; }
+      .product-box { min-height:96px; padding:12px; margin-top:8px; }
+      .grid-2 { grid-template-columns:1fr; gap:10px; }
+      .product-line { align-items:flex-start; gap:12px; }
+      .thumb { width:68px; height:68px; flex-basis:68px; border-radius:12px; }
+      .product-name { font-size:18px; margin-bottom:4px; }
+      .meta { font-size:13px; line-height:1.3; }
+      .area-btn, .action-btn { min-height:48px; font-size:16px; }
+      input[type="text"], input[type="number"] { min-height:48px; padding:12px 14px; border-radius:14px; }
+      label { margin-bottom:5px; font-size:12px; }
+      .hint { display:none; }
+      .message { min-height:40px; padding:10px 12px; font-size:14px; }
+      .status-box { min-height:48px; font-size:13px; }
+      .pill { min-height:34px; padding:6px 12px; font-size:12px; }
     }
   </style>
 </head>
